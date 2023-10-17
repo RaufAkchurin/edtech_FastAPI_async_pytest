@@ -41,13 +41,13 @@ async def async_session_test():
     yield async_session
 
 
-@pytest.fixture(scope="function", autouse=True)
-async def clean_tables(async_session_test):
-    """Clean data in all tables before running test function"""
-    async with async_session_test() as session:
-        async with session.begin():
-            for table_for_cleaning in CLEAN_TABLES:
-                await session.execute(f"""TRUNCATE TABLE {table_for_cleaning};""")
+# @pytest.fixture(scope="function", autouse=True)
+# async def clean_tables(async_session_test):
+#     """Clean data in all tables before running test function"""
+#     async with async_session_test() as session:
+#         async with session.begin():
+#             for table_for_cleaning in CLEAN_TABLES:
+#                 await session.execute(f"""TRUNCATE TABLE {table_for_cleaning};""")
 
 
 async def _get_test_db():
