@@ -1,8 +1,8 @@
 """comment
 
-Revision ID: f37f79ff99dd
+Revision ID: 897941c160ad
 Revises: 
-Create Date: 2023-10-17 12:56:08.520714
+Create Date: 2023-10-18 21:36:06.378786
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'f37f79ff99dd'
+revision = '897941c160ad'
 down_revision = None
 branch_labels = None
 depends_on = None

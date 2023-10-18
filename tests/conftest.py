@@ -14,7 +14,6 @@ import settings
 from db.session import get_db
 from main import app
 
-
 CLEAN_TABLES = [
     "users",
 ]
@@ -41,13 +40,13 @@ async def async_session_test():
     yield async_session
 
 
-# @pytest.fixture(scope="function", autouse=True)
-# async def clean_tables(async_session_test):
-#     """Clean data in all tables before running test function"""
-#     async with async_session_test() as session:
-#         async with session.begin():
-#             for table_for_cleaning in CLEAN_TABLES:
-#                 await session.execute(f"""TRUNCATE TABLE {table_for_cleaning};""")
+@pytest.fixture(scope="function", autouse=True)
+async def clean_tables(async_session_test):
+    """Clean data in all tables before running test function"""
+    async with async_session_test() as session:
+        async with session.begin():
+            for table_for_cleaning in CLEAN_TABLES:
+                await session.execute(f"""TRUNCATE TABLE {table_for_cleaning};""")
 
 
 async def _get_test_db():
@@ -89,3 +88,15 @@ async def get_user_from_database(asyncpg_pool):
             )
 
     return get_user_from_database_by_uuid
+
+
+@pytest.fixture
+async def create_user_in_database(asyncpg_pool):
+    async def create_user_in_database(user_id: str, name: str, surname: str, email:str, is_active: bool):
+        async with asyncpg_pool.acquire() as connection:
+            return await connection.execute(
+                """INSERT INTO users VALUES ($1, $2, $3, $4, $5)""",
+                user_id, name, surname, email, is_active
+            )
+
+    return create_user_in_database
