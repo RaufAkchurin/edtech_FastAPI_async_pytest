@@ -1,7 +1,8 @@
 import uuid
 from enum import Enum
+from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, constr, EmailStr
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import String
@@ -27,5 +28,3 @@ class User(Base):
     is_active = Column(Boolean(), default=True)
 
 
-class DeleteUserResponse(BaseModel):
-    deleted_user_id: uuid.UUID
