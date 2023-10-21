@@ -1,12 +1,8 @@
 import uuid
-from enum import Enum
-from typing import Optional
 
-from pydantic import BaseModel, constr, EmailStr
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import String
-from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import declarative_base
 
@@ -26,5 +22,3 @@ class User(Base):
     surname = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     is_active = Column(Boolean(), default=True)
-
-

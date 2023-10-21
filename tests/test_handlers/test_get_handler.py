@@ -1,7 +1,4 @@
-import json
 from uuid import uuid4
-
-import pytest
 
 
 async def test_get_user(client, create_user_in_database):
@@ -10,7 +7,7 @@ async def test_get_user(client, create_user_in_database):
         "name": "Nikolai",
         "surname": "Sviridov",
         "email": "lol@kek.ru",
-        "is_active": True
+        "is_active": True,
     }
     await create_user_in_database(**user_data)
     resp = client.get(f"/user/?user_id={user_data['user_id']}")

@@ -52,9 +52,13 @@ async def clean_tables(async_session_test):
 async def _get_test_db():
     try:
         # создаем асинхронный движок для взаимодействия с БД
-        test_engine = create_async_engine(settings.TEST_DATABASE_URL, future=True, echo=True)
+        test_engine = create_async_engine(
+            settings.TEST_DATABASE_URL, future=True, echo=True
+        )
         # создаем объект сессии асинхронной
-        test_async_session = sessionmaker(test_engine, expire_on_commit=False, class_=AsyncSession)
+        test_async_session = sessionmaker(
+            test_engine, expire_on_commit=False, class_=AsyncSession
+        )
         yield test_async_session()
     finally:
         pass
@@ -74,7 +78,9 @@ async def client() -> Generator[TestClient, Any, None]:
 
 @pytest.fixture(scope="session")
 async def asyncpg_pool():
-    pool = await asyncpg.create_pool("".join(settings.TEST_DATABASE_URL.split("+asyncpg")))
+    pool = await asyncpg.create_pool(
+        "".join(settings.TEST_DATABASE_URL.split("+asyncpg"))
+    )
     yield pool
     pool.close()
 
@@ -92,11 +98,17 @@ async def get_user_from_database(asyncpg_pool):
 
 @pytest.fixture
 async def create_user_in_database(asyncpg_pool):
-    async def create_user_in_database(user_id: str, name: str, surname: str, email:str, is_active: bool):
+    async def create_user_in_database(
+        user_id: str, name: str, surname: str, email: str, is_active: bool
+    ):
         async with asyncpg_pool.acquire() as connection:
             return await connection.execute(
                 """INSERT INTO users VALUES ($1, $2, $3, $4, $5)""",
-                user_id, name, surname, email, is_active
+                user_id,
+                name,
+                surname,
+                email,
+                is_active,
             )
 
     return create_user_in_database

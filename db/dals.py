@@ -1,7 +1,9 @@
 from typing import Union
 from uuid import UUID
 
-from sqlalchemy import and_, update, select
+from sqlalchemy import and_
+from sqlalchemy import select
+from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.models import User
@@ -14,21 +16,19 @@ class UserDAL:
     def __init__(self, db_session: AsyncSession):
         self.db_session = db_session
 
-    async def create_user(
-            self, name: str, surname: str, email: str
-    ) -> User:
-        new_user = User(
-            name=name,
-            surname=surname,
-            email=email
-        )
+    async def create_user(self, name: str, surname: str, email: str) -> User:
+        new_user = User(name=name, surname=surname, email=email)
         self.db_session.add(new_user)
         await self.db_session.flush()
         return new_user
 
     async def delete_user(self, user_id: UUID) -> Union[UUID, None]:
-        query = update(User).where(and_(User.user_id == user_id, User.is_active == True)). \
-            values(is_active=False).returning(User.user_id)
+        query = (
+            update(User)
+            .where(and_(User.user_id == user_id, User.is_active == True))
+            .values(is_active=False)
+            .returning(User.user_id)
+        )
         res = await self.db_session.execute(query)
         deleted_user_id_row = res.fetchone()
         if deleted_user_id_row is not None:
@@ -42,10 +42,12 @@ class UserDAL:
             return user_row[0]
 
     async def update_user(self, user_id: UUID, **kwargs) -> Union[UUID, None]:
-        query = update(User). \
-            where(and_(User.user_id == user_id, User.is_active == True)). \
-            values(kwargs). \
-            returning(User.user_id)
+        query = (
+            update(User)
+            .where(and_(User.user_id == user_id, User.is_active == True))
+            .values(kwargs)
+            .returning(User.user_id)
+        )
         res = await self.db_session.execute(query)
         update_user_in_row = res.fetchone()
         if update_user_in_row is not None:

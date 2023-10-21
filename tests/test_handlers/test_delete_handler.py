@@ -1,7 +1,5 @@
-import json
+import uuid
 from uuid import uuid4
-
-import pytest
 
 
 async def test_delete_user(client, create_user_in_database, get_user_from_database):
@@ -10,7 +8,7 @@ async def test_delete_user(client, create_user_in_database, get_user_from_databa
         "name": "Nikolai",
         "surname": "Sviridov",
         "email": "lol@kek.ru",
-        "is_active": True
+        "is_active": True,
     }
     await create_user_in_database(**user_data)
     resp = client.delete(f"/user/?user_id={user_data['user_id']}")
@@ -23,3 +21,10 @@ async def test_delete_user(client, create_user_in_database, get_user_from_databa
     assert user_from_db["email"] == user_data["email"]
     assert user_from_db["is_active"] is False
     assert user_from_db["user_id"] == user_data["user_id"]
+
+
+async def test_delete_user_not_found(client):
+    user_id = uuid.uuid4()
+    resp = client.delete(f"/user/?user_id={user_id}")
+    assert resp.status_code == 404
+    assert resp.json() == {"detail": f"User with id {user_id} not found."}

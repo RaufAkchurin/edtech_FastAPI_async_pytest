@@ -1,14 +1,8 @@
 import uvicorn
-from fastapi import HTTPException, FastAPI, APIRouter
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from fastapi import APIRouter
+from fastapi import FastAPI
+
 from api.handlers import user_router
-
-
-
-
-
-
-
 
 # BLOCK WITH ROUTERS
 #############################

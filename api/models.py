@@ -3,14 +3,18 @@ import uuid
 from typing import Optional
 
 from fastapi import HTTPException
-from pydantic import BaseModel, EmailStr, validator, constr
+from pydantic import BaseModel
+from pydantic import constr
+from pydantic import EmailStr
+from pydantic import validator
 
 LETTER_MATCH_PATTERN = re.compile(r"^[а-яА-Яa-zA-Z\-]+$")
 
 
 class TuneModel(BaseModel):
     class Config:
-        """ говорим пайдентику все объекты превращать в жэсоны"""
+        """говорим пайдентику все объекты превращать в жэсоны"""
+
         orm_mode = True
 
 

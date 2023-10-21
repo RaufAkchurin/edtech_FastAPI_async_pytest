@@ -1,15 +1,10 @@
 import json
-import uuid
 
 import pytest
 
 
 async def test_create_user(client, get_user_from_database):
-    user_data = {
-        "name": "Nikoliai",
-        "surname": "Sviridov",
-        "email": "sad@dsa.com"
-    }
+    user_data = {"name": "Nikoliai", "surname": "Sviridov", "email": "sad@dsa.com"}
     resp = client.post("/user/", data=json.dumps(user_data))
     data_from_resp = resp.json()
     assert resp.status_code == 200
@@ -27,15 +22,11 @@ async def test_create_user(client, get_user_from_database):
 
 
 async def test_create_user_duplicate_email_error(client, get_user_from_database):
-    user_data = {
-        "name": "Nikoliai",
-        "surname": "Sviridov",
-        "email": "sad@dsa.com"
-    }
+    user_data = {"name": "Nikoliai", "surname": "Sviridov", "email": "sad@dsa.com"}
     user_data_same_email = {
         "name": "Koshi",
         "surname": "Shvalov",
-        "email": "sad@dsa.com"
+        "email": "sad@dsa.com",
     }
     resp = client.post("/user/", data=json.dumps(user_data))
     data_from_resp = resp.json()
@@ -103,7 +94,9 @@ async def test_create_user_duplicate_email_error(client, get_user_from_database)
         ),
     ],
 )
-async def test_create_user_validation_error(client, user_data_for_creation, expected_status_code, expected_detail):
+async def test_create_user_validation_error(
+    client, user_data_for_creation, expected_status_code, expected_detail
+):
     resp = client.post("/user/", data=json.dumps(user_data_for_creation))
     data_from_resp = resp.json()
     assert resp.status_code == expected_status_code
