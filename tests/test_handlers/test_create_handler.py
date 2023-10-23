@@ -4,7 +4,12 @@ import pytest
 
 
 async def test_create_user(client, get_user_from_database):
-    user_data = {"name": "Nikoliai", "surname": "Sviridov", "email": "sad@dsa.com"}
+    user_data = {
+        "name": "Nikoliai",
+        "surname": "Sviridov",
+        "email": "sad@dsa.com",
+        "hashed_password": "hash",
+    }
     resp = client.post("/user/", data=json.dumps(user_data))
     data_from_resp = resp.json()
     assert resp.status_code == 200
@@ -22,7 +27,12 @@ async def test_create_user(client, get_user_from_database):
 
 
 async def test_create_user_duplicate_email_error(client, get_user_from_database):
-    user_data = {"name": "Nikoliai", "surname": "Sviridov", "email": "sad@dsa.com"}
+    user_data = {
+        "name": "Nikoliai",
+        "surname": "Sviridov",
+        "email": "sad@dsa.com",
+        "hashed_password": "hash",
+    }
     user_data_same_email = {
         "name": "Koshi",
         "surname": "Shvalov",
@@ -66,6 +76,11 @@ async def test_create_user_duplicate_email_error(client, get_user_from_database)
                         "msg": "field required",
                         "type": "value_error.missing",
                     },
+                    {
+                        "loc": ["body", "password"],
+                        "msg": "field required",
+                        "type": "value_error.missing",
+                    },
                 ]
             },
         ),
@@ -88,6 +103,11 @@ async def test_create_user_duplicate_email_error(client, get_user_from_database)
                         "loc": ["body", "email"],
                         "msg": "value is not a valid email address",
                         "type": "value_error.email",
+                    },
+                    {
+                        "loc": ["body", "password"],
+                        "msg": "field required",
+                        "type": "value_error.missing",
                     },
                 ]
             },

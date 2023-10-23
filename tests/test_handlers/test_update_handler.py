@@ -9,6 +9,7 @@ async def test_update_user(client, create_user_in_database, get_user_from_databa
         "surname": "Sviridov",
         "email": "lol@kek.ru",
         "is_active": True,
+        "hashed_password": "$2b$12$XrOiXxxFh7avj5.dYUEC.OLURxFojtSn05TEE5WZOYe3NjVnSI0.u",
     }
     user_data_updated = {
         "name": "Ivan",
