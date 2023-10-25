@@ -1,6 +1,8 @@
 import json
 from uuid import uuid4
 
+from tests.conftest import create_test_auth_headers_for_user
+
 
 async def test_update_user(client, create_user_in_database, get_user_from_database):
     user_data = {
@@ -18,7 +20,9 @@ async def test_update_user(client, create_user_in_database, get_user_from_databa
     }
     await create_user_in_database(**user_data)
     resp = client.patch(
-        f"/user/?user_id={user_data['user_id']}", data=json.dumps(user_data_updated)
+        f"/user/?user_id={user_data['user_id']}",
+        data=json.dumps(user_data_updated),
+        headers=create_test_auth_headers_for_user(user_data["email"])
     )
     assert resp.status_code == 200
     res_data = resp.json()

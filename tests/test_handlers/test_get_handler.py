@@ -1,5 +1,7 @@
 from uuid import uuid4
 
+from tests.conftest import create_test_auth_headers_for_user
+
 
 async def test_get_user(client, create_user_in_database):
     user_data = {
@@ -11,7 +13,8 @@ async def test_get_user(client, create_user_in_database):
         "hashed_password": "hash",
     }
     await create_user_in_database(**user_data)
-    resp = client.get(f"/user/?user_id={user_data['user_id']}")
+    resp = client.get(f"/user/?user_id={user_data['user_id']}",
+                      headers=create_test_auth_headers_for_user(user_data["email"]))
     assert resp.status_code == 200
     user_from_response = resp.json()
     assert user_from_response["user_id"] == str(user_data["user_id"])
