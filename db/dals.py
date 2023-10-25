@@ -1,5 +1,6 @@
 from typing import Union
 from uuid import UUID
+from enum import Enum
 
 from sqlalchemy import and_
 from sqlalchemy import select
@@ -12,15 +13,22 @@ from db.models import User
 ###########################################
 # Блок взаимодейтствия БД с бизнес логикой
 ###########################################
+class PortalRole(str, Enum):
+    ROLE_PORTAL_USER = "ROLE_PORTAL_USER"
+    ROLE_PORTAL_ADMIN = "ROLE_PORTAL_ADMIN"
+    ROLE_PORTAL_SUPERADMIN = "ROLE_PORTAL_SUPERADMIN"
+
+
 class UserDAL:
     def __init__(self, db_session: AsyncSession):
         self.db_session = db_session
 
     async def create_user(
-        self, name: str, surname: str, email: str, hashed_password: str
+        self, name: str, surname: str, email: str, hashed_password: str, roles: list[PortalRole]
     ) -> User:
         new_user = User(
-            name=name, surname=surname, email=email, hashed_password=hashed_password
+            name=name, surname=surname, email=email, hashed_password=hashed_password,
+            roles=roles
         )
         self.db_session.add(new_user)
         await self.db_session.flush()

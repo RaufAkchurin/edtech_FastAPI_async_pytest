@@ -1,6 +1,7 @@
 import uuid
 from uuid import uuid4
 
+from db.dals import PortalRole
 from tests.conftest import create_test_auth_headers_for_user
 
 
@@ -12,6 +13,7 @@ async def test_delete_user(client, create_user_in_database, get_user_from_databa
         "email": "lol@kek.ru",
         "is_active": True,
         "hashed_password": "hash",
+        "roles": ["ROLE_PORTAL_USER"],
     }
     await create_user_in_database(**user_data)
     resp = client.delete(f"/user/?user_id={user_data['user_id']}",
@@ -35,6 +37,7 @@ async def test_delete_user_not_found(client, create_user_in_database):
         "email": "lol@kek.ru",
         "is_active": True,
         "hashed_password": "hash",
+        "roles": ["ROLE_PORTAL_USER"],
     }
     await create_user_in_database(**user_data)
 
@@ -53,6 +56,7 @@ async def test_delete_user_unauth(client, create_user_in_database):
         "email": "lol@kek.ru",
         "is_active": True,
         "hashed_password": "hash",
+        "roles":[PortalRole.ROLE_PORTAL_USER, ]
     }
     await create_user_in_database(**user_data)
     resp = client.delete(f"/user/?user_id={user_data['user_id']}",

@@ -1,6 +1,7 @@
 import json
 from uuid import uuid4
 
+from db.dals import PortalRole
 from tests.conftest import create_test_auth_headers_for_user
 
 
@@ -12,6 +13,7 @@ async def test_update_user(client, create_user_in_database, get_user_from_databa
         "email": "lol@kek.ru",
         "is_active": True,
         "hashed_password": "$2b$12$XrOiXxxFh7avj5.dYUEC.OLURxFojtSn05TEE5WZOYe3NjVnSI0.u",
+        "roles":[PortalRole.ROLE_PORTAL_USER, ]
     }
     user_data_updated = {
         "name": "Ivan",

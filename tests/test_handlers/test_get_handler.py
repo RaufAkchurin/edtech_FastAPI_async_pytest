@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+from db.dals import PortalRole
 from tests.conftest import create_test_auth_headers_for_user
 
 
@@ -11,6 +12,7 @@ async def test_get_user(client, create_user_in_database):
         "email": "lol@kek.ru",
         "is_active": True,
         "hashed_password": "hash",
+        "roles": [PortalRole.ROLE_PORTAL_USER, ]
     }
     await create_user_in_database(**user_data)
     resp = client.get(f"/user/?user_id={user_data['user_id']}",

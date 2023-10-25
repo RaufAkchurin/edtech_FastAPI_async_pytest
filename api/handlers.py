@@ -3,7 +3,7 @@ from typing import Union
 from uuid import UUID
 
 from api.actions.auth import get_current_user_from_token
-from api.actions.user import _create_new_user, _delete_user, _get_user_by_id, _update_user
+from api.actions.user import _create_new_user, _delete_user, _get_user_by_id, _update_user, check_user_permissions
 from db.models import User
 from hashing import Hasher
 
@@ -40,6 +40,14 @@ async def delete_user(
         db: AsyncSession = Depends(get_db),
         current_user: User = Depends(get_current_user_from_token)
 ) -> DeleteUserResponse:
+    user_for_deletion = await _get_user_by_id(user_id, db)
+    if user_for_deletion is None:
+        raise HTTPException(status_code=404, detail=f"User with id {user_id} not found.")
+    if not check_user_permissions(
+        target_user=user_for_deletion,
+        current_user=current_user
+    ):
+        raise HTTPException(status_code=403, detail="Forbidden.")
     deleted_user_id = await _delete_user(user_id, db)
     if deleted_user_id is None:
         raise HTTPException(
