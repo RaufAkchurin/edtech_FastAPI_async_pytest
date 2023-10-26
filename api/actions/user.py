@@ -2,6 +2,8 @@ from logging import getLogger
 from typing import Union
 from uuid import UUID
 
+from fastapi import HTTPException
+
 from api.models import UserCreate, ShowUser
 from db.dals import UserDAL, PortalRole
 from db.models import User
@@ -54,6 +56,10 @@ async def _update_user(updated_user_params, user_id: UUID, session) -> Union[UUI
 
 
 def check_user_permissions(target_user: User, current_user: User) -> bool:
+    if PortalRole.ROLE_PORTAL_SUPERADMIN in current_user.roles:
+        raise HTTPException(
+            status_code=406, detail="Superadmin cannot be deleted via API"
+        )
     if target_user.user_id != current_user.user_id:
         # check admin role
         if not {

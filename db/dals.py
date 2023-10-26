@@ -7,16 +7,12 @@ from sqlalchemy import select
 from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.models import User
+from db.models import User, PortalRole
 
 
 ###########################################
 # Блок взаимодейтствия БД с бизнес логикой
 ###########################################
-class PortalRole(str, Enum):
-    ROLE_PORTAL_USER = "ROLE_PORTAL_USER"
-    ROLE_PORTAL_ADMIN = "ROLE_PORTAL_ADMIN"
-    ROLE_PORTAL_SUPERADMIN = "ROLE_PORTAL_SUPERADMIN"
 
 
 class UserDAL:
