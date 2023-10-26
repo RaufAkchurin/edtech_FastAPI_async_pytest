@@ -14,7 +14,7 @@ services:
       - custom
   luchanos_oxford_university_app:
     container_name: luchanos_oxford_university_app
-    image: luchanos_oxford_university_app
+    image: luchanos_oxford_university_app # Specify the name of the Docker image to be built
     environment:
       REAL_DATABASE_URL: "postgresql+asyncpg://postgres:postgres@db:5432/postgres"
     build:
@@ -24,6 +24,6 @@ services:
       - "8000:8000"
     networks:
       - custom
-  networks:
-    custom:
-      driver: bridge
+networks:
+  custom:
+    driver: bridge
